@@ -25,7 +25,7 @@ def test_create_user_username_already_exists(client, user):
     response = client.post(
         '/users/',
         json={
-            'username': 'Teste',
+            'username': user.username,
             'password': 'password',
             'email': 'test2@test2.com',
         },
@@ -41,7 +41,7 @@ def test_create_user_email_already_exists(client, user):
         json={
             'username': 'Teste2',
             'password': 'password',
-            'email': 'teste@test.com',
+            'email': user.email,
         },
     )
 
@@ -83,15 +83,15 @@ def test_update_user(client, user, token):
     }
 
 
-def test_update_wrong_user(client, user, token):
+def test_update_wrong_user(client, other_user, token):
     response = client.put(
-        f'/users/{user.id + 1}',
+        f'/users/{other_user.id}',
         headers={'Authorization': f'Bearer {token}'},
         json={
             'password': '123',
             'username': 'testusername2',
             'email': 'test@test.com',
-            'id': user.id,
+            'id': other_user.id,
         },
     )
 
@@ -108,9 +108,9 @@ def test_delete_user(client, user, token):
     assert response.json() == {'message': 'User deleted'}
 
 
-def test_delete_wrong_user(client, user, token):
+def test_delete_wrong_user(client, other_user, token):
     response = client.delete(
-        f'/users/{user.id + 1}',
+        f'/users/{other_user.id}',
         headers={'Authorization': f'Bearer {token}'},
     )
 
@@ -118,15 +118,14 @@ def test_delete_wrong_user(client, user, token):
     assert response.json() == {'detail': 'Not enough permissions'}
 
 
-def test_get_user_by_id(client):
-    test_create_user(client)
-    response = client.get('/users/1')
+def test_get_user_by_id(client, user):
+    response = client.get(f'/users/{user.id}')
 
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
-        'username': 'testusername',
-        'email': 'test@test.com',
-        'id': 1,
+        'username': user.username,
+        'email': user.email,
+        'id': user.id,
     }
 
 
