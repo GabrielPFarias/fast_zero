@@ -19,10 +19,10 @@ class User:
         init=False, server_default=func.now()
     )
     updated_at: Mapped[datetime] = mapped_column(
-        init=False, default=func.now(), onupdate=func.now()
+        init=False, onupdate=func.now(), nullable=True
     )
 
-
+ 
 class TodoState(str, Enum):
     draft = 'draft'
     todo = 'todo'
@@ -43,6 +43,6 @@ class Todo:
         init=False, server_default=func.now()
     )
     updated_at: Mapped[datetime] = mapped_column(
-        init=False, default=func.now(), onupdate=func.now()
+        init=False, onupdate=func.now(), nullable=True
     )
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))

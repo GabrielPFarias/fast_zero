@@ -1,7 +1,5 @@
 from http import HTTPStatus
 
-from sqlalchemy import func
-
 from fast_zero.schemas import TodoState
 from tests.conftest import TodoFactory
 
@@ -25,9 +23,7 @@ def test_create_todo(client, token):
 
 def test_list_todos_should_return_5_todos(session, client, user, token):
     expected_todos = 5
-    session.bulk_save_objects(
-        TodoFactory.create_batch(5, user_id=user.id, updated_at=func.now())
-    )
+    session.bulk_save_objects(TodoFactory.create_batch(5, user_id=user.id))
     session.commit()
 
     response = client.get(
