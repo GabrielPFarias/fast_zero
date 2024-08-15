@@ -69,6 +69,26 @@ def update_user(
             status_code=HTTPStatus.FORBIDDEN, detail='Not enough permissions'
         )
 
+    db_user = session.scalar(
+        select(User).where(
+            (User.id != current_user.id) & (
+                (User.username == user.username) | (User.email == user.email)
+            )
+        )
+    )
+
+    if db_user:
+        if db_user.username == user.username:
+            raise HTTPException(
+                status_code=HTTPStatus.BAD_REQUEST,
+                detail='Username already exists'
+            )
+        elif db_user.email == user.email:
+            raise HTTPException(
+                status_code=HTTPStatus.BAD_REQUEST,
+                detail='Email already exists'
+            )
+
     current_user.username = user.username
     current_user.email = user.email
     current_user.password = get_password_hash(user.password)

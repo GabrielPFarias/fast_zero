@@ -99,6 +99,38 @@ def test_update_wrong_user(client, other_user, token):
     assert response.json() == {'detail': 'Not enough permissions'}
 
 
+def test_update_username_already_exists(client, user, other_user, token):
+    response = client.put(
+        f'/users/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
+        json={
+            'password': '123',
+            'username': other_user.username,
+            'email': other_user.email,
+            'id': user.id
+        }
+    )
+
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert response.json() == {'detail': 'Username already exists'}
+
+
+def test_update_email_already_exists(client, user, other_user, token):
+    response = client.put(
+        f'/users/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
+        json={
+            'password': '123',
+            'username': 'anotherUser',
+            'email': other_user.email,
+            'id': user.id,
+        }
+    )
+
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert response.json() == {'detail': 'Email already exists'}
+
+
 def test_delete_user(client, user, token):
     response = client.delete(
         f'/users/{user.id}',

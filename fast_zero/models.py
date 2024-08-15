@@ -22,7 +22,7 @@ class User:
         init=False, onupdate=func.now(), nullable=True
     )
 
- 
+
 class TodoState(str, Enum):
     draft = 'draft'
     todo = 'todo'
