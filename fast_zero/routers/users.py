@@ -71,9 +71,8 @@ def update_user(
 
     db_user = session.scalar(
         select(User).where(
-            (User.id != current_user.id) & (
-                (User.username == user.username) | (User.email == user.email)
-            )
+            (User.id != current_user.id)
+            & ((User.username == user.username) | (User.email == user.email))
         )
     )
 
@@ -81,12 +80,12 @@ def update_user(
         if db_user.username == user.username:
             raise HTTPException(
                 status_code=HTTPStatus.BAD_REQUEST,
-                detail='Username already exists'
+                detail='Username already exists',
             )
         elif db_user.email == user.email:
             raise HTTPException(
                 status_code=HTTPStatus.BAD_REQUEST,
-                detail='Email already exists'
+                detail='Email already exists',
             )
 
     current_user.username = user.username

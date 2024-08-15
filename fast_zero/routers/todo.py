@@ -92,7 +92,7 @@ def patch_todo(
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND, detail='Task not found.'
         )
-    
+
     for key, value in todo.model_dump(exclude_unset=True).items():
         setattr(db_todo, key, value)
 

@@ -107,8 +107,8 @@ def test_update_username_already_exists(client, user, other_user, token):
             'password': '123',
             'username': other_user.username,
             'email': other_user.email,
-            'id': user.id
-        }
+            'id': user.id,
+        },
     )
 
     assert response.status_code == HTTPStatus.BAD_REQUEST
@@ -124,7 +124,7 @@ def test_update_email_already_exists(client, user, other_user, token):
             'username': 'anotherUser',
             'email': other_user.email,
             'id': user.id,
-        }
+        },
     )
 
     assert response.status_code == HTTPStatus.BAD_REQUEST

@@ -22,5 +22,4 @@ jobs:
 
       - name: Test
         run:
-            poetry run task format
             poetry run task test
